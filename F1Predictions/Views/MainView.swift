@@ -8,8 +8,45 @@
 import SwiftUI
 
 struct MainView: View {
-    var body: some View {
-        Text("This is a formula one app")
+  
+  
+    var body: some View 
+    {
+      Rectangle()
+        .fill(Color.red)
+        .frame(width: 100, height: 100)
+      
+      TabView
+      {
+        HomeView()
+          .tabItem
+          {
+            VStack
+            {
+              Image(systemName: "house")
+                .renderingMode(.template)
+                  .foregroundStyle(.yellow)
+              Text("Home")
+            }
+          }
+        
+        PredictionsView().tabItem
+        {
+          Label("Predictions", systemImage: "trophy")
+        }
+        
+        ChatView().tabItem
+        {
+          Label("Chat", systemImage: "tag")
+        }
+        
+        ForumView().tabItem
+        {
+          Label("Forum", systemImage: "tray")
+        }
+        
+        
+      }
     }
 }
 

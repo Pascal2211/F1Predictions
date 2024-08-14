@@ -11,7 +11,7 @@ import SwiftUI
 struct F1PredictionsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
         }
     }
 }
