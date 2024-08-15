@@ -12,9 +12,6 @@ struct MainView: View {
   
     var body: some View 
     {
-      Rectangle()
-        .fill(Color.red)
-        .frame(width: 100, height: 100)
       
       TabView
       {
