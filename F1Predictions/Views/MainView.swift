@@ -15,16 +15,9 @@ struct MainView: View {
       
       TabView
       {
-        HomeView()
-          .tabItem
+        HomeView().tabItem
           {
-            VStack
-            {
-              Image(systemName: "house")
-                .renderingMode(.template)
-                  .foregroundStyle(.yellow)
-              Text("Home")
-            }
+            Label("Home", systemImage: "house")
           }
         
         PredictionsView().tabItem
@@ -41,8 +34,7 @@ struct MainView: View {
         {
           Label("Forum", systemImage: "tray")
         }
-        
-        
+
       }
     }
 }

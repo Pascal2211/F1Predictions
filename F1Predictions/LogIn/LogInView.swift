@@ -17,6 +17,7 @@ struct LogInView: View {
   @State private var isCreatedUserActive = false
   @State private var isLoggedIn: Bool = false
   @State private var userFullName: String = ""
+  @State private var showWelcomeMessage: Bool = false
 
   
   //RegexFunction that makes the rules for a password
@@ -78,35 +79,35 @@ struct LogInView: View {
             
             Button {
               Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                      if let error = error {
-                          // Handle the error, e.g., show an alert
-                          print("Failed to log in: \(error.localizedDescription)")
-                          return
-                      }
-
-                      // If login is successful, fetch the user's data from Firestore
-                      guard let userId = Auth.auth().currentUser?.uid else { return }
-                      let db = Firestore.firestore()
-                      let userRef = db.collection("users").document(userId)
-                      
-                      userRef.getDocument { document, error in
-                          if let document = document, document.exists {
-                              let data = document.data()
-                              let firstName = data?["firstName"] as? String ?? "User"
-                              let lastName = data?["lastName"] as? String ?? ""
-                              let fullName = "\(firstName) \(lastName)"
-                              
-                              // Store the user's full name and navigate to the HomeView
-                              // You may use a navigation or state change here
-                              isLoggedIn = true
-                              UserDefaults.standard.set(fullName, forKey: "userFullName")
-                              
-                              // Navigate to HomeView or perform the necessary action
-                          } else {
-                              print("User data does not exist")
-                          }
-                      }
+                if let error = error {
+                  // Handle the error, e.g., show an alert
+                  print("Failed to log in: \(error.localizedDescription)")
+                  return
+                }
+                
+                // If login is successful, fetch the user's data from Firestore
+                guard let userId = Auth.auth().currentUser?.uid else { return }
+                let db = Firestore.firestore()
+                let userRef = db.collection("users").document(userId)
+                
+                userRef.getDocument { document, error in
+                  if let document = document, document.exists {
+                    let data = document.data()
+                    let firstName = data?["firstName"] as? String ?? "User"
+                    let lastName = data?["lastName"] as? String ?? ""
+                    let fullName = "\(firstName) \(lastName)"
+                    
+                    // Store the user's full name and navigate to the HomeView
+                    // You may use a navigation or state change here
+                    isLoggedIn = true
+                    UserDefaults.standard.set(fullName, forKey: "userFullName")
+                    
+                    // Navigate to HomeView or perform the necessary action
+                  } else {
+                    print("User data does not exist")
                   }
+                }
+              }
               
             } label: {
               Text("Sign in")
@@ -124,7 +125,7 @@ struct LogInView: View {
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.horizontal)
-              }
+            }
             
             HStack{
               Text("Dont have a user ?")
@@ -179,13 +180,31 @@ struct LogInView: View {
           .padding(.bottom)
           .padding(.top)
           
-        NavigationLink(destination: HomeView(), isActive: $isLoggedIn) {
-                   EmptyView()
-                 }
+          NavigationLink(destination: HomeView(), isActive: $isLoggedIn) {
+            EmptyView()
+          }
         }
-        .padding(.top)
-        .padding(.top)
+        
+        if showWelcomeMessage {
+          VStack{
+            Spacer()
+            Text("Welcome, \(userFullName) !")
+              .font(.caption)
+              .fontWeight(.bold)
+              .padding()
+              .background(Color.green)
+              .cornerRadius(10)
+              .shadow(radius: 10)
+              .transition(.scale)
+            Spacer()
+            
+          }
+        }
+        
       }
+      .padding(.top)
+      .padding(.top)
+      .animation(.easeInOut(duration: 0.5), value: showWelcomeMessage)
     }
   
 }
