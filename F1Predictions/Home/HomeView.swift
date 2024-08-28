@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+  
     var body: some View {
       GeometryReader { geometry in
                   ZStack {
@@ -32,8 +33,15 @@ struct HomeView: View {
                   .position(x: geometry.size.width / 2, y: 50)
               }
               .edgesIgnoringSafeArea(.top)
-    }
-}
+      
+      
+      
+      
+      
+      
+                              
+            }
+          }
 
 #Preview {
     HomeView()
